@@ -149,8 +149,8 @@ rates drop sharply for both genders and become roughly equal.
 # Bar chart of victim age and sex
 filtered = crime_lapd[crime_lapd['vict_sex'].isin(['M', 'F'])]
 age_bins = list(range(0, 100, 5))
-filtered['age_bin'] = pd.cut(filtered['vict_age'], bins=age_bins, right=False)
-age_sex_counts = filtered.groupby(['age_bin', 'vict_sex']).size().unstack(fill_value=0)
+filtered.loc[:, 'age_bin'] = pd.cut(filtered['vict_age'], bins=age_bins, right=False)
+age_sex_counts = (filtered.groupby(['age_bin', 'vict_sex'], observed=False).size().unstack(fill_value=0))
 age_sex_counts.index = [f"{int(interval.left)}-{int(interval.right-1)}" 
                         for interval in age_sex_counts.index]
 age_sex_counts.plot(kind='bar', figsize=(10,6), color=['lightcoral', 'skyblue'], width=0.8)
