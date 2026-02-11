@@ -4,24 +4,20 @@ import pandas as pd
 from datetime import datetime
 
 @st.cache_resource
-def load_model(path):
-    return joblib.load(path)
+def load_model():
+    return joblib.load("crime_risk_model.pkl")
 
 @st.cache_data
-def load_data(path):
-    return pd.read_csv(path)
+def load_data():
+    return pd.read_csv("crime_20_24_clean.csv")
 
-model = joblib.load("crime_risk_model.pkl")
-crime_lapd = pd.read_csv("crime_20_24_clean.csv")
+model = load_model()
+crime_lapd = load_data()
 
 st.title("LA Crime Risk Predictor")
-
 area = st.selectbox("Area", sorted(crime_lapd["area_name"].unique()))
 date = st.date_input("Date")
 time = st.time_input("Time")
-
-
-
 dt = datetime.combine(date, time)
 
 input_df = pd.DataFrame([{
