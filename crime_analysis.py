@@ -147,9 +147,9 @@ than men, while in the 35-74 age range, men are more frequently targeted. After 
 rates drop sharply for both genders and become roughly equal.
 """)
 # Bar chart of victim age and sex
-filtered = crime_lapd[crime_lapd['vict_sex'].isin(['M', 'F'])]
+filtered = crime_lapd[crime_lapd['vict_sex'].isin(['M', 'F'])].copy()
 age_bins = list(range(0, 100, 5))
-filtered.loc[:, 'age_bin'] = pd.cut(filtered['vict_age'], bins=age_bins, right=False)
+filtered['age_bin'] = pd.cut(filtered['vict_age'], bins=age_bins, right=False)
 age_sex_counts = (filtered.groupby(['age_bin', 'vict_sex'], observed=False).size().unstack(fill_value=0))
 age_sex_counts.index = [f"{int(interval.left)}-{int(interval.right-1)}" 
                         for interval in age_sex_counts.index]
