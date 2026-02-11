@@ -188,14 +188,23 @@ area_summary['severity_index'] = (
 area_summary['crime_norm'] = (
     area_summary['total_crimes'] / area_summary['total_crimes'].max()
 )
+
 area_summary['danger_index'] = (
     0.5 * area_summary['crime_norm'] +
     0.5 * area_summary['severity_index']
 )
+
+area_summary['risk_level'] = pd.qcut(
+    area_summary['danger_index'],
+    q=3,
+    labels=["Low", "Medium", "High"]
+)
+
 colormap = linear.YlOrRd_09.scale(
     area_summary['danger_index'].min(),
     area_summary['danger_index'].max()
 )
+
 
 m = folium.Map(location=[34.05, -118.25], zoom_start=10, tiles="CartoDB positron")
 for _, row in area_summary.iterrows():
@@ -210,7 +219,7 @@ for _, row in area_summary.iterrows():
         html=(
             f"<b style='font-size:16px'>{row['area_name']}</b><br><br>"
             f"<b>Total Crimes:</b> {row['total_crimes']}<br>"
-            # f"<b>Part 1 Crimes:</b> {row['part1_crimes']}<br>"
+            f"<b>Risk Level:</b> {row['risk_level']}<br>"
             f"<b>Danger Index:</b> {row['danger_index']:.2f}"
         ),
         max_width=300
