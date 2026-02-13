@@ -15,6 +15,19 @@ model = load_model()
 crime_lapd = load_data()
 
 st.title("LA Crime Risk Predictor")
+st.markdown("""
+This project looks at crime risk across Los Angeles using LAPD data. Crimes are 
+divided into Part 1 (more serious) and Part 2 (less serious) offenses. Each area gets 
+a monthly risk score that combines the total number of crimes group by hour and date with 
+the number of Part 1 offenses, and these scores are labeled as Low, Medium, or High 
+risk.
+
+The model uses the location, time of day, day of the week, and month to estimate the 
+risk level at a specific place and time. By training a Random Forest classifier on 
+this information, it can predict whether a particular area at a given moment is likely 
+to be safer or more dangerous, giving users a clear, data-driven view of crime patterns 
+throughout the city.
+""")
 area = st.selectbox("Area", sorted(crime_lapd["area_name"].unique()))
 date = st.date_input("Date")
 time = st.time_input("Time")
